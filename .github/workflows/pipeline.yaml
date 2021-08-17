@@ -1,0 +1,34 @@
+name: Validate and Publish
+ 
+on:
+ push:
+   branches:
+     - '**'
+ pull_request:
+   branches: [ master ]
+ 
+jobs:
+ helm-lint:      
+   name: Helm lint and release
+   runs-on: ubuntu-latest
+ 
+   steps:
+     - uses: actions/checkout@v2
+
+     - name: set up helm
+       uses: azure/setup-helm@v1
+       with:
+         version: v3.4.0
+
+     - name: validate helm
+       run: helm lint stable/*
+
+       #- name: Helm Lint
+       #uses: WyriHaximus/github-action-helm3@v2
+       #with:
+       #  exec: helm lint ./helm-chart
+       #- name: Helm install
+       #uses: WyriHaximus/github-action-helm3@v2
+       #with:
+       #  exec: helm upgrade --install github-magnolia-docker ./helm-chart
+       #  kubeconfig: '${{ secrets.KUBECONFIG }}'
