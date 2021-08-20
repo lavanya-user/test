@@ -22,6 +22,12 @@ jobs:
 
      - name: validate helm
        run: helm lint stable/*
+    
+     - name: helm deploy to kuberenetes cluster
+       uses: WyriHaximus/github-action-helm3@v2
+       with:
+         exec: helm upgrade --install nginx-git ./stable/nginx
+         kubeconfig: '${{ secrets.CONFIG }}'
 
        #- name: Helm Lint
        #uses: WyriHaximus/github-action-helm3@v2
