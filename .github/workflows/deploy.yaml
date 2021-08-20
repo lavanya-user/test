@@ -1,11 +1,13 @@
 name: deploy to kubernetes
  
 on:
- push:
+ #push:
+ #  branches:
+ #    - master
+ pull_request:
+   types: closed
    branches:
      - master
- pull_request:
-   branches: [ master ]
  
 jobs:
  helm-deploy:      
