@@ -1,0 +1,36 @@
+name: deploy to kubernetes
+ 
+on:
+ push:
+   branches:
+     - master
+ 
+jobs:
+ helm-deploy:      
+   name: Helm lint and release
+   runs-on: ubuntu-latest
+ 
+   steps:
+     - uses: actions/checkout@v2
+
+     - name: set up helm install
+       uses: azure/setup-helm@v1
+       with:
+         version: v3.4.0
+
+     - name: helm deploy to kuberenetes cluster
+       uses: WyriHaximus/github-action-helm3@v2
+       with:
+         exec: helm upgrade --install nginx-git ./stable/nginx
+         kubeconfig: '${{ secrets.CONFIG }}'
+       #run: helm lint stable/*
+
+       #- name: Helm Lint
+       #uses: WyriHaximus/github-action-helm3@v2
+       #with:
+       #  exec: helm lint ./helm-chart
+       #- name: Helm install
+       #uses: WyriHaximus/github-action-helm3@v2
+       #with:
+       #  exec: helm upgrade --install github-magnolia-docker ./helm-chart
+       #  kubeconfig: '${{ secrets.KUBECONFIG }}'
