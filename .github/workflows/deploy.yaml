@@ -1,33 +1,33 @@
-name: Validate and Publish
+name: deploy to kubernetes
  
 on:
- push:
-   branches:
-     - '**'
+ #push:
+ #  branches:
+ #    - main
  pull_request:
-   branches: [ main ]
+   types: closed
+   branches:
+     - main
  
 jobs:
- helm-lint:      
+ helm-deploy:      
    name: Helm lint and release
    runs-on: ubuntu-latest
  
    steps:
      - uses: actions/checkout@v2
 
-     - name: set up helm
+     - name: set up helm install
        uses: azure/setup-helm@v1
        with:
          version: v3.4.0
 
-     - name: validate helm
-       run: helm lint stable/*
-    
-     #- name: helm deploy to kuberenetes cluster
-     #  uses: WyriHaximus/github-action-helm3@v2
-     #  with:
-     #    exec: helm upgrade --install nginx-git ./stable/nginx
-     #    kubeconfig: '${{ secrets.CONFIG }}'
+     - name: helm deploy to kuberenetes cluster
+       uses: WyriHaximus/github-action-helm3@v2
+       with:
+         exec: helm upgrade --install nginx-git ./stable/nginx
+         kubeconfig: '${{ secrets.CONFIG }}'
+       #run: helm lint stable/*
 
        #- name: Helm Lint
        #uses: WyriHaximus/github-action-helm3@v2
